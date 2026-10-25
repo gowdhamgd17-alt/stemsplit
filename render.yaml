@@ -1,0 +1,19 @@
+services:
+  - type: web
+    runtime: static
+    name: stemsplit
+    buildCommand: echo "static site, nothing to build"
+    staticPublishPath: ./
+    headers:
+      - path: /*
+        name: Cross-Origin-Opener-Policy
+        value: same-origin
+      - path: /*
+        name: Cross-Origin-Embedder-Policy
+        value: require-corp
+      - path: /model/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /ort/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
