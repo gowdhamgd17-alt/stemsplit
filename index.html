@@ -95,16 +95,18 @@ button.secondary { flex: 1 1 140px; }
 .summary { display: flex; flex-wrap: wrap; gap: 6px 22px; align-items: center; color: var(--muted); }
 .summary .done { color: var(--vocal); font-weight: 600; }
 .summary b { color: var(--fg); font-family: var(--font-mono); font-weight: 500; }
-.stems { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.stems { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 16px; }
 .strip { border-top: 3px solid var(--c); }
 .strip h3 { margin: 0; font-family: var(--font-display); font-size: 1.2rem; display: flex; align-items: center; gap: 9px; }
 .strip h3 i { width: 9px; height: 9px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
 .strip .sub { margin: 0; color: var(--muted); font-size: .9rem; }
 .strip.vocal { --c: var(--vocal); } .strip.inst { --c: var(--inst); }
+canvas.wave.seekable { cursor: pointer; touch-action: pan-y; height: 72px; }
 canvas.wave { width: 100%; height: 64px; display: block; background: var(--panel-2); border-radius: 8px; border: 1px solid var(--line); }
-.player { display: flex; align-items: center; gap: 12px; }
+.player { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.player button.skip { min-width: 46px; height: 40px; min-height: 40px; padding: 0 8px; border-radius: 99px; font-family: var(--font-mono); font-size: .8rem; font-weight: 500; flex: none; }
 .player button.play { width: 46px; height: 46px; padding: 0; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--c); border-color: var(--c); color: var(--ink); }
-.player input[type=range] { flex: 1; min-width: 0; accent-color: var(--c); }
+.player input[type=range] { flex: 1 1 140px; min-width: 0; accent-color: var(--c); height: 28px; }
 .player .t { font-family: var(--font-mono); font-size: .82rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .strip button.save { background: transparent; border-color: var(--c); color: var(--c); }
 .touch { display: none; }
@@ -120,6 +122,78 @@ footer { border-top: 1px solid var(--line); padding-top: 14px; color: var(--mute
 footer summary { cursor: pointer; color: var(--fg); font-weight: 600; padding: 6px 0; }
 footer p { margin: 4px 0 8px; max-width: 75ch; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+/* ---- Studio ---- */
+:root { --take: #ff8fb8; --import: #9fb6ff; --rec: #ff5c63; }
+.studio { gap: 16px; }
+.st-intro h2 { margin: 0 0 4px; font-family: var(--font-display); font-size: 1.5rem; }
+.st-intro p { margin: 0; color: var(--muted); max-width: 65ch; }
+.st-transport { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--panel); padding-block: 8px; border-bottom: 1px solid var(--line); }
+.st-transport button { flex: none; }
+.st-playbtn { flex: 0 0 auto !important; min-width: 96px; }
+.st-recbtn { border-color: var(--rec); color: var(--rec); background: transparent; min-width: 120px; }
+.st-recbtn::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--rec); margin-right: 8px; vertical-align: 0; }
+.st-recbtn.recording { background: var(--rec); color: #fff; animation: st-pulse 1.2s ease-in-out infinite; }
+.st-recbtn.recording::before { background: #fff; border-radius: 2px; }
+@keyframes st-pulse { 50% { box-shadow: 0 0 0 6px rgba(255, 92, 99, .25); } }
+@media (prefers-reduced-motion: reduce) { .st-recbtn.recording { animation: none; } }
+.st-time { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted); font-size: .9rem; white-space: nowrap; }
+.st-seek { flex: 1 1 100%; min-width: 0; accent-color: var(--vocal); height: 28px; margin: 0; }
+.st-meter { flex: 1 1 100%; height: 8px; border-radius: 99px; background: var(--panel-2); border: 1px solid var(--line); overflow: hidden; }
+.st-meter > div { height: 100%; width: 0; background: var(--vocal); transition: width .05s linear; }
+.st-meter > div.hot { background: var(--rec); }
+.st-msg { margin: 0; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel-2); }
+.st-msg.error { border-color: var(--danger); background: var(--danger-bg); }
+.st-tracks { display: flex; flex-direction: column; gap: 12px; }
+.st-track { border: 1px solid var(--line); border-radius: 12px; background: var(--panel-2); padding: 12px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.st-track.silent .st-lane canvas { opacity: .3; }
+.st-trackhead { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.st-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); flex: none; }
+.st-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.st-tools { display: flex; gap: 6px; flex-wrap: wrap; }
+.st-tog { min-width: 40px; min-height: 36px; padding: 0 10px; font-family: var(--font-mono); }
+.st-tog[aria-pressed="true"] { background: var(--inst); color: var(--ink); border-color: var(--inst); }
+.st-tog.solo[aria-pressed="true"] { background: var(--vocal); border-color: var(--vocal); }
+.st-small { min-height: 36px; padding: 6px 12px; font-size: .88rem; }
+.st-small.danger { color: var(--danger); }
+.st-small[aria-pressed="true"] { background: var(--vocal); color: var(--ink); border-color: var(--vocal); }
+.st-lane { position: relative; height: 52px; border-radius: 8px; background: var(--bg); border: 1px solid var(--line); cursor: pointer; touch-action: pan-y; overflow: hidden; }
+.st-lane canvas { width: 100%; height: 100%; display: block; }
+.st-head { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--fg); left: 0; pointer-events: none; }
+.st-loopband { position: absolute; top: 0; bottom: 0; background: rgba(62, 224, 195, .08); border-left: 1px dashed var(--muted); border-right: 1px dashed var(--muted); pointer-events: none; }
+.st-loopband.on { background: rgba(62, 224, 195, .18); border-color: var(--vocal); }
+.st-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap: 8px 16px; }
+.st-ctl { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "l v" "i i"; align-items: center; gap: 2px 8px; min-width: 0; }
+.st-ctl > label { grid-area: l; font-size: .86rem; color: var(--muted); }
+.st-ctl > input[type=range] { grid-area: i; width: 100%; accent-color: var(--vocal); height: 28px; margin: 0; }
+.st-ctl > select { grid-area: i; font: inherit; color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; min-height: 42px; }
+.st-ctl > .st-val { grid-area: v; font-family: var(--font-mono); font-size: .8rem; color: var(--fg); font-variant-numeric: tabular-nums; }
+.st-ctl > .st-small { grid-column: 1 / -1; justify-self: start; }
+.st-ends { color: var(--muted); font-size: .76rem; margin-left: 6px; }
+.st-check { display: flex; gap: 10px; align-items: flex-start; font-size: .92rem; cursor: pointer; }
+.st-check input { width: 20px; height: 20px; accent-color: var(--vocal); flex: none; margin: 1px 0 0; }
+.st-fx { border-top: 1px dashed var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 10px; }
+.st-panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 16px; }
+.st-panel { border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.st-panel h3 { margin: 0; font-family: var(--font-display); font-size: 1.1rem; }
+.st-panel .hint { margin: 0; }
+.st-loopctl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.st-loop-label { font-size: .86rem; color: var(--muted); margin-right: 4px; }
+.st-bottom { display: flex; gap: 10px; flex-wrap: wrap; }
+.st-bottom > * { flex: 1 1 220px; min-width: 0; }
+.st-add { position: relative; display: flex; align-items: center; justify-content: center; border: 1px dashed var(--line); border-radius: 10px; min-height: 44px; padding: 10px 14px; font-weight: 600; cursor: pointer; }
+.st-add:hover { border-color: var(--muted); }
+.st-add:focus-within { outline: 3px solid var(--vocal); outline-offset: 2px; }
+.st-add input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+@media (max-width: 520px) {
+  .st-transport { gap: 6px 8px; padding-block: 6px; }
+  .st-transport button { min-height: 40px; padding: 8px 12px; }
+  .st-playbtn { min-width: 72px; }
+  .st-recbtn { min-width: 0; }
+  .st-time { font-size: .8rem; margin-left: auto; }
+  .st-seek { height: 24px; }
+  .st-panel { padding: 12px; }
+  .st-ends { display: block; margin-left: 0; }
+}
 </style>
 </head>
 <body>
@@ -190,10 +264,12 @@ footer p { margin: 4px 0 8px; max-width: 75ch; }
       <article class="card strip vocal" id="card-v">
         <h3><i></i>Vocals</h3>
         <p class="sub">The lead voice on its own</p>
-        <canvas class="wave" id="wave-v" aria-hidden="true"></canvas>
+        <canvas class="wave seekable" id="wave-v" aria-hidden="true" title="Tap or drag to jump"></canvas>
         <div class="player">
+          <button class="skip" id="back-v" aria-label="Back 10 seconds">−10</button>
           <button class="play" id="play-v" aria-label="Play vocals"></button>
-          <input type="range" id="seek-v" min="0" max="1000" value="0" aria-label="Vocals position">
+          <button class="skip" id="fwd-v" aria-label="Forward 10 seconds">+10</button>
+          <input type="range" id="seek-v" min="0" max="1000" step="1" value="0" aria-label="Vocals position">
           <span class="t" id="time-v">0:00 / 0:00</span>
         </div>
         <button class="save" id="save-v">Download vocals</button>
@@ -201,10 +277,12 @@ footer p { margin: 4px 0 8px; max-width: 75ch; }
       <article class="card strip inst" id="card-i">
         <h3><i></i>Instrumental</h3>
         <p class="sub">The music without the lead vocal</p>
-        <canvas class="wave" id="wave-i" aria-hidden="true"></canvas>
+        <canvas class="wave seekable" id="wave-i" aria-hidden="true" title="Tap or drag to jump"></canvas>
         <div class="player">
+          <button class="skip" id="back-i" aria-label="Back 10 seconds">−10</button>
           <button class="play" id="play-i" aria-label="Play instrumental"></button>
-          <input type="range" id="seek-i" min="0" max="1000" value="0" aria-label="Instrumental position">
+          <button class="skip" id="fwd-i" aria-label="Forward 10 seconds">+10</button>
+          <input type="range" id="seek-i" min="0" max="1000" step="1" value="0" aria-label="Instrumental position">
           <span class="t" id="time-i">0:00 / 0:00</span>
         </div>
         <button class="save" id="save-i">Download instrumental</button>
@@ -216,6 +294,59 @@ footer p { margin: 4px 0 8px; max-width: 75ch; }
       <button id="another" class="secondary">Process another song</button>
       <button id="clear" class="secondary">Clear results</button>
     </div>
+  </section>
+
+    <section id="studio" class="card studio" hidden aria-labelledby="st-h">
+    <div class="st-intro">
+      <h2 id="st-h">Studio</h2>
+      <p>Mix the tracks, sing over the music, add effects to your voice, DJ the instrumental, and download your own version.</p>
+    </div>
+
+    <div class="st-transport" role="group" aria-label="Playback">
+      <button id="st-start" class="secondary" title="Back to start">⏮</button>
+      <button id="st-play" class="primary st-playbtn" aria-pressed="false">Play</button>
+      <button id="st-rec" class="st-recbtn">Record</button>
+      <span id="st-time" class="st-time">0:00.0 / 0:00</span>
+      <input type="range" id="st-seek" class="st-seek" min="0" max="1000" step="1" value="0" aria-label="Song position">
+      <div id="st-meter" class="st-meter" hidden aria-label="Microphone level"><div id="st-meter-fill"></div></div>
+    </div>
+    <p id="st-msg" class="st-msg" hidden role="status"></p>
+
+    <div id="st-tracks" class="st-tracks"></div>
+
+    <div class="st-panels">
+      <section class="st-panel" aria-labelledby="st-sing-h">
+        <h3 id="st-sing-h">Sing &amp; record</h3>
+        <p class="hint">Press <strong>Record</strong>: the music plays and your microphone records. Press <strong>Stop recording</strong> when you're done; your take appears as a new track you can add effects to.</p>
+        <label class="st-check"><input type="checkbox" id="st-headphones" checked> I'm wearing headphones (recommended, so the music doesn't leak into your voice)</label>
+        <label class="st-check"><input type="checkbox" id="st-monitor"> Hear my voice with effects while recording</label>
+        <div class="st-ctl"><label for="st-takefx">Effect for new takes</label><select id="st-takefx"></select></div>
+      </section>
+
+      <section class="st-panel" aria-labelledby="st-dj-h">
+        <h3 id="st-dj-h">DJ</h3>
+        <div class="st-ctl"><label for="st-xfade">Crossfader <span class="st-ends">Vocals ◀ ▶ Music</span></label><input type="range" id="st-xfade" min="-1" max="1" step="0.01" value="0"><output id="st-xfade-out" class="st-val">Both full</output></div>
+        <div class="st-ctl"><label for="st-speed">Speed <span class="st-ends">pitch follows, like a turntable</span></label><input type="range" id="st-speed" min="0.75" max="1.25" step="0.01" value="1"><output id="st-speed-out" class="st-val">1.00×</output><button id="st-speed-reset" class="st-small">Reset</button></div>
+        <div class="st-ctl"><label for="st-filter">Filter sweep <span class="st-ends">Low-pass ◀ ▶ High-pass</span></label><input type="range" id="st-filter" min="-1" max="1" step="0.01" value="0"><output id="st-filter-out" class="st-val">Off</output></div>
+        <div class="st-ctl"><label for="st-master">Master volume</label><input type="range" id="st-master" min="0" max="1.5" step="0.01" value="0.9"><output id="st-master-out" class="st-val">90%</output></div>
+        <div class="st-loopctl">
+          <span class="st-loop-label">Loop</span>
+          <button id="st-a" class="st-small">Set A</button>
+          <button id="st-b" class="st-small">Set B</button>
+          <button id="st-loop" class="st-small" aria-pressed="false" disabled>Loop off</button>
+          <output id="st-loop-out" class="st-val">Not set</output>
+        </div>
+      </section>
+    </div>
+
+    <div class="st-bottom">
+      <label class="st-add secondary-look">
+        <input type="file" id="st-addfile" accept="audio/*,.mp3,.wav,.flac,.m4a">
+        + Add an audio file as a track
+      </label>
+      <button id="st-export" class="primary">Download mix (WAV)</button>
+    </div>
+    <p class="note">The mix download includes every track you can hear, with its effects, plus the DJ crossfader, speed, filter and master volume. Recording needs microphone permission; your voice stays on this device like everything else.</p>
   </section>
 
   <footer>
@@ -230,6 +361,7 @@ footer p { margin: 4px 0 8px; max-width: 75ch; }
 </div>
 
 <script src="engine.js"></script>
+<script src="studio.js" defer></script>
 <script>
 (() => {
 "use strict";
@@ -536,26 +668,41 @@ function showResults(secs) {
   makePlayer("v", stems.vocals); makePlayer("i", stems.inst);
   drawWave($("wave-v"), chans(stems.vocals), "--vocal"); drawWave($("wave-i"), chans(stems.inst), "--inst");
   updateSaveUI();
+  if (window.StemSplitStudio) window.StemSplitStudio.load({ vocals: stems.vocals, instrumental: stems.inst, name: current.stem, stopCards: stopAll });
   $("results").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
 }
+const waves = {};
 function drawWave(canvas, [L, R], token) {
   const dpr = window.devicePixelRatio || 1, w = canvas.clientWidth || 300, h = canvas.clientHeight || 64;
   canvas.width = w * dpr; canvas.height = h * dpr;
-  const g = canvas.getContext("2d"); g.scale(dpr, dpr);
-  g.fillStyle = getComputedStyle(document.documentElement).getPropertyValue(token).trim();
-  const cols = Math.floor(w / 3), per = Math.max(1, Math.floor(L.length / cols));
+  const cols = Math.max(20, Math.floor(w / 3)), per = Math.max(1, Math.floor(L.length / cols));
   let peak = 1e-9; const vals = new Float32Array(cols);
   for (let c = 0; c < cols; c++) { let m = 0; const st = c * per; for (let i = st; i < st + per && i < L.length; i += 16) { const v = Math.abs(L[i]) + Math.abs(R[i]); if (v > m) m = v; } vals[c] = m; if (m > peak) peak = m; }
-  for (let c = 0; c < cols; c++) { const bh = Math.max(1.5, (vals[c] / peak) * (h - 10)); g.fillRect(c * 3, (h - bh) / 2, 2, bh); }
+  const css = getComputedStyle(document.documentElement);
+  waves[canvas.id] = { canvas, vals, peak, w, h, dpr, color: css.getPropertyValue(token).trim(), head: css.getPropertyValue("--fg").trim() };
+  paintWave(canvas.id, 0);
+}
+function paintWave(id, frac) {
+  const s = waves[id]; if (!s) return;
+  const g = s.canvas.getContext("2d"); g.setTransform(s.dpr, 0, 0, s.dpr, 0, 0); g.clearRect(0, 0, s.w, s.h);
+  const cols = s.vals.length, step = s.w / cols, played = frac * cols;
+  for (let c = 0; c < cols; c++) {
+    const bh = Math.max(1.5, (s.vals[c] / s.peak) * (s.h - 12));
+    g.globalAlpha = c < played ? 1 : 0.35; g.fillStyle = s.color;
+    g.fillRect(c * step, (s.h - bh) / 2, Math.max(1, step - 1), bh);
+  }
+  g.globalAlpha = 1; g.fillStyle = s.head; g.fillRect(Math.min(s.w - 2, frac * s.w), 0, 2, s.h);
 }
 function makePlayer(key, audio) {
-  const btn = $("play-" + key), seek = $("seek-" + key), time = $("time-" + key);
+  const btn = $("play-" + key), seek = $("seek-" + key), time = $("time-" + key), canvas = $("wave-" + key);
   const dur = audio.duration;
   const p = players[key] = { dur, src: null, startedAt: 0, offset: 0, buffer: audio, raf: 0 };
   btn.innerHTML = ICON_PLAY; seek.value = 0; time.textContent = `0:00 / ${fmtTime(dur)}`;
+  const now = () => (p.src ? Math.min(dur, actx.currentTime - p.startedAt) : p.offset);
   const tick = () => {
-    const t = p.src ? Math.min(dur, actx.currentTime - p.startedAt) : p.offset;
+    const t = now();
     seek.value = Math.round((t / dur) * 1000); time.textContent = `${fmtTime(t)} / ${fmtTime(dur)}`;
+    paintWave(canvas.id, t / dur);
     if (p.src) p.raf = requestAnimationFrame(tick);
   };
   p.stop = (keepPos) => {
@@ -564,6 +711,7 @@ function makePlayer(key, audio) {
   };
   p.play = () => {
     for (const k in players) if (k !== key) players[k].stop(true);
+    if (window.StemSplitStudio) window.StemSplitStudio.pause();
     try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {} // iPhone: play even with the silent switch on
     if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: SR });
     if (actx.state === "suspended") actx.resume();
@@ -573,8 +721,18 @@ function makePlayer(key, audio) {
     src.start(0, p.offset); p.src = src; p.startedAt = actx.currentTime - p.offset;
     btn.innerHTML = ICON_PAUSE; btn.setAttribute("aria-label", btn.getAttribute("aria-label").replace("Play", "Pause")); tick();
   };
+  p.seekTo = (t) => { const playing = !!p.src; p.stop(false); p.offset = Math.max(0, Math.min(dur - 0.01, t)); if (playing) p.play(); else tick(); };
   btn.onclick = () => (p.src ? p.stop(true) : p.play());
-  seek.oninput = () => { const playing = !!p.src; p.stop(false); p.offset = (seek.value / 1000) * dur; if (playing) p.play(); else tick(); };
+  seek.oninput = () => p.seekTo((seek.value / 1000) * dur);
+  $("back-" + key).onclick = () => p.seekTo(now() - 10);
+  $("fwd-" + key).onclick = () => p.seekTo(now() + 10);
+  // tap or drag on the waveform to jump
+  let drag = null;
+  const posAt = (e) => { const r = canvas.getBoundingClientRect(); return Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * dur; };
+  canvas.onpointerdown = (e) => { drag = { playing: !!p.src }; canvas.setPointerCapture(e.pointerId); p.stop(false); p.offset = posAt(e); tick(); };
+  canvas.onpointermove = (e) => { if (!drag) return; p.offset = posAt(e); tick(); };
+  const end = () => { if (!drag) return; const was = drag.playing; drag = null; if (was) p.play(); };
+  canvas.onpointerup = end; canvas.onpointercancel = end;
 }
 function stopAll() { for (const k in players) players[k].stop(false); }
 
@@ -592,6 +750,7 @@ function encodeWav(L, R) {
 const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
 function crc32(d) { let c = 0xffffffff; for (let i = 0; i < d.length; i++) c = CRC[(c ^ d[i]) & 0xff] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; }
 // ---------- saving (through the viewer's save dialog) ----------
+window.StemSplitEncodeWav = encodeWav; // shared with the Studio
 function updateSaveUI() {
   $("save-v").hidden = $("save-i").hidden = false;
   $("savenote").textContent = "Downloads are lossless 16-bit WAV files (44.1 kHz stereo), named after your song.";
@@ -622,6 +781,7 @@ $("save-v").addEventListener("click", () => save("v"));
 $("save-i").addEventListener("click", () => save("i"));
 
 function resetResults() {
+  if (window.StemSplitStudio) window.StemSplitStudio.unload();
   stopAll(); stems = null; for (const k in players) delete players[k];
   if (actx) { actx.close().catch(() => {}); actx = null; }
   $("results").hidden = true; $("runerr").hidden = true;

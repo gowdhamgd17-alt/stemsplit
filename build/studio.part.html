@@ -1,0 +1,52 @@
+  <section id="studio" class="card studio" hidden aria-labelledby="st-h">
+    <div class="st-intro">
+      <h2 id="st-h">Studio</h2>
+      <p>Mix the tracks, sing over the music, add effects to your voice, DJ the instrumental, and download your own version.</p>
+    </div>
+
+    <div class="st-transport" role="group" aria-label="Playback">
+      <button id="st-start" class="secondary" title="Back to start">⏮</button>
+      <button id="st-play" class="primary st-playbtn" aria-pressed="false">Play</button>
+      <button id="st-rec" class="st-recbtn">Record</button>
+      <span id="st-time" class="st-time">0:00.0 / 0:00</span>
+      <input type="range" id="st-seek" class="st-seek" min="0" max="1000" step="1" value="0" aria-label="Song position">
+      <div id="st-meter" class="st-meter" hidden aria-label="Microphone level"><div id="st-meter-fill"></div></div>
+    </div>
+    <p id="st-msg" class="st-msg" hidden role="status"></p>
+
+    <div id="st-tracks" class="st-tracks"></div>
+
+    <div class="st-panels">
+      <section class="st-panel" aria-labelledby="st-sing-h">
+        <h3 id="st-sing-h">Sing &amp; record</h3>
+        <p class="hint">Press <strong>Record</strong>: the music plays and your microphone records. Press <strong>Stop recording</strong> when you're done; your take appears as a new track you can add effects to.</p>
+        <label class="st-check"><input type="checkbox" id="st-headphones" checked> I'm wearing headphones (recommended, so the music doesn't leak into your voice)</label>
+        <label class="st-check"><input type="checkbox" id="st-monitor"> Hear my voice with effects while recording</label>
+        <div class="st-ctl"><label for="st-takefx">Effect for new takes</label><select id="st-takefx"></select></div>
+      </section>
+
+      <section class="st-panel" aria-labelledby="st-dj-h">
+        <h3 id="st-dj-h">DJ</h3>
+        <div class="st-ctl"><label for="st-xfade">Crossfader <span class="st-ends">Vocals ◀ ▶ Music</span></label><input type="range" id="st-xfade" min="-1" max="1" step="0.01" value="0"><output id="st-xfade-out" class="st-val">Both full</output></div>
+        <div class="st-ctl"><label for="st-speed">Speed <span class="st-ends">pitch follows, like a turntable</span></label><input type="range" id="st-speed" min="0.75" max="1.25" step="0.01" value="1"><output id="st-speed-out" class="st-val">1.00×</output><button id="st-speed-reset" class="st-small">Reset</button></div>
+        <div class="st-ctl"><label for="st-filter">Filter sweep <span class="st-ends">Low-pass ◀ ▶ High-pass</span></label><input type="range" id="st-filter" min="-1" max="1" step="0.01" value="0"><output id="st-filter-out" class="st-val">Off</output></div>
+        <div class="st-ctl"><label for="st-master">Master volume</label><input type="range" id="st-master" min="0" max="1.5" step="0.01" value="0.9"><output id="st-master-out" class="st-val">90%</output></div>
+        <div class="st-loopctl">
+          <span class="st-loop-label">Loop</span>
+          <button id="st-a" class="st-small">Set A</button>
+          <button id="st-b" class="st-small">Set B</button>
+          <button id="st-loop" class="st-small" aria-pressed="false" disabled>Loop off</button>
+          <output id="st-loop-out" class="st-val">Not set</output>
+        </div>
+      </section>
+    </div>
+
+    <div class="st-bottom">
+      <label class="st-add secondary-look">
+        <input type="file" id="st-addfile" accept="audio/*,.mp3,.wav,.flac,.m4a">
+        + Add an audio file as a track
+      </label>
+      <button id="st-export" class="primary">Download mix (WAV)</button>
+    </div>
+    <p class="note">The mix download includes every track you can hear, with its effects, plus the DJ crossfader, speed, filter and master volume. Recording needs microphone permission; your voice stays on this device like everything else.</p>
+  </section>
